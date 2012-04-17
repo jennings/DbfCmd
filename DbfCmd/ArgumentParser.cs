@@ -17,6 +17,7 @@ namespace DbfCmd
         {
             var result = new Arguments()
             {
+                ShowHelp = false,
                 OutputCsv = false,
                 OutputHeaders = true
             };
@@ -34,6 +35,9 @@ namespace DbfCmd
                         {
                             case 'c':
                                 result.OutputCsv = true;
+                                break;
+                            case 'h':
+                                result.ShowHelp = true;
                                 break;
                             case 'n':
                                 result.OutputHeaders = false;
@@ -53,16 +57,12 @@ namespace DbfCmd
                         haveReadDirectory = true;
                     }
                 }
+
             }
 
-            if (result.Directory == null)
+            if (result.Query == null || result.Directory == null)
             {
-                throw new Exception("Must set a directory.");
-            }
-
-            if (result.Query == null)
-            {
-                throw new Exception("Must set a query");
+                result.ShowHelp = true;
             }
 
             return result;
@@ -71,8 +71,10 @@ namespace DbfCmd
         public class Arguments
         {
             public string Directory { get; set; }
-            
+
             public string Query { get; set; }
+
+            public bool ShowHelp { get; set; }
 
             public bool OutputCsv { get; set; }
 
