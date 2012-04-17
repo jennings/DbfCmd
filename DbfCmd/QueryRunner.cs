@@ -36,7 +36,7 @@ namespace DbfCmd
             string result = "";
 
             using (var db = new OleDbConnection(csb.ConnectionString))
-            using (var cmd = new OleDbCommand())
+            using (var cmd = db.CreateCommand())
             {
                 cmd.Connection = db;
                 cmd.CommandText = query;
@@ -60,6 +60,8 @@ namespace DbfCmd
 
                                 result += reader.GetName(i);
                             }
+
+                            result += "\n";
                         }
 
                         while (reader.Read())
