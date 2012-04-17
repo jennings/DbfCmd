@@ -47,7 +47,21 @@ namespace DbfCmd
                 }
                 else if (haveReadDirectory)
                 {
-                    result.Query = arg;
+                    if (result.Query != null)
+                    {
+                        throw new CommandLineException("Can only run one query");
+                    }
+
+                    if (arg.StartsWith("@"))
+                    {
+                        var filename = arg.Substring(1, arg.Length - 1);
+                        var text = File.ReadAllText(filename);
+                        result.Query = text;
+                    }
+                    else
+                    {
+                        result.Query = arg;
+                    }
                 }
                 else
                 {
@@ -57,7 +71,6 @@ namespace DbfCmd
                         haveReadDirectory = true;
                     }
                 }
-
             }
 
             if (result.Query == null || result.Directory == null)
