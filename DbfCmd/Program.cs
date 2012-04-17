@@ -33,6 +33,11 @@ namespace DbfCmd
 
         private static void DisplayHelp()
         {
+            Console.WriteLine("Usage: dbfcmd.exe [options] <path> <query>");
+            Console.WriteLine("");
+            Console.WriteLine("Options:");
+            Console.WriteLine("  -c       Output as CSV");
+            Console.WriteLine("  -n       Do not output headers");
         }
     }
 }
