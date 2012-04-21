@@ -1,8 +1,8 @@
-﻿//------------------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------------------
 // <copyright file="AssemblyInfo.cs" company="The DbfCmd Project">
 //   Copyright 2011 Various Contributors. Licensed under the Apache License, Version 2.0.
 // </copyright>
-//------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
