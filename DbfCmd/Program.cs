@@ -12,6 +12,7 @@ namespace DbfCmd
     using System.Data.OleDb;
     using System.IO;
     using System.Text;
+    using System.Windows.Forms;
 
     public class Program
     {
@@ -28,9 +29,17 @@ namespace DbfCmd
                 }
 
                 var runner = new QueryRunner(arguments.Directory, arguments.OutputCsv, arguments.OutputHeaders);
-                string result = runner.Run(arguments.Query);
+                var result = runner.Run(arguments.Query);
 
-                Console.WriteLine(result);
+                var form = new Form();
+                var grid = new DataGrid();
+                grid.DataSource = result;
+                grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+                grid.Size = form.ClientSize;
+                form.Controls.Add(grid);
+                form.Show();
+
+                Application.Run(form);
             }
             catch (CommandLineException ex)
             {

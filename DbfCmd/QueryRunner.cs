@@ -8,6 +8,7 @@ namespace DbfCmd
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.OleDb;
     using System.Text;
 
@@ -26,14 +27,14 @@ namespace DbfCmd
 
         public string Directory { get; set; }
 
-        public string Run(string query)
+        public DataTable Run(string query)
         {
             var csb = new OleDbConnectionStringBuilder();
             csb.Provider = @"Microsoft.Jet.OLEDB.4.0";
             csb.DataSource = this.Directory;
             csb.Add("Extended Properties", "dBASE IV");
 
-            string result = "";
+            DataTable result = new DataTable();
 
             using (var db = new OleDbConnection(csb.ConnectionString))
             using (var cmd = db.CreateCommand())
@@ -47,43 +48,14 @@ namespace DbfCmd
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
-                        var numColumns = reader.FieldCount;
-
-                        if (this.OutputHeaders)
-                        {
-                            for (int i = 0; i < numColumns; i++)
-                            {
-                                if (i != 0)
-                                {
-                                    result += ",";
-                                }
-
-                                result += reader.GetName(i);
-                            }
-
-                            result += "\n";
-                        }
-
-                        while (reader.Read())
-                        {
-                            for (int i = 0; i < numColumns; i++)
-                            {
-                                if (i != 0)
-                                {
-                                    result += ",";
-                                }
-
-                                result += reader[i].ToString();
-                            }
-
-                            result += "\n";
-                        }
+                        result.Load(reader);
                     }
                 }
                 else
                 {
                     var recordsAffected = cmd.ExecuteNonQuery();
-                    result = String.Format("{0} records affected.", recordsAffected);
+                    result.Columns.Add("RecordsAffected");
+                    result.LoadDataRow(new object[] { recordsAffected }, false);
                 }
 
                 db.Close();
