@@ -8,8 +8,7 @@ namespace DbfCmd
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Odbc;
-    using System.Data.OleDb;
+    using System.Data;
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
@@ -18,35 +17,42 @@ namespace DbfCmd
     {
         public static void Main(string[] args)
         {
+            ArgumentParser.Arguments arguments;
+
             try
             {
-                var arguments = ArgumentParser.Parse(args);
-
-                if (arguments.ShowHelp)
-                {
-                    Program.DisplayHelp();
-                    Environment.Exit(0);
-                }
-
-                var runner = new QueryRunner(arguments.Directory, arguments.OutputCsv, arguments.OutputHeaders);
-                var result = runner.Run(arguments.Query);
-
-                var form = new Form();
-                var grid = new DataGrid();
-                grid.DataSource = result;
-                grid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-                grid.Size = form.ClientSize;
-                form.Controls.Add(grid);
-                form.Show();
-
-                Application.Run(form);
+                arguments = ArgumentParser.Parse(args);
             }
             catch (CommandLineException ex)
             {
                 Console.WriteLine(ex.Message);
                 Program.DisplayHelp();
                 Environment.Exit(-1);
+                return;
             }
+
+            if (arguments.ShowHelp)
+            {
+                Program.DisplayHelp();
+                Environment.Exit(0);
+            }
+
+            var runner = new QueryRunner(arguments.Directory, arguments.OutputCsv, arguments.OutputHeaders);
+            var result = runner.Run(arguments.Query);
+
+            if (arguments.OutputCsv)
+            {
+                Program.DisplayCsvTable(result);
+            }
+            else
+            {
+                Application.Run(new HumanReadableDisplayForm(result));
+            }
+        }
+
+        private static void DisplayCsvTable(DataTable data)
+        {
+            throw new NotImplementedException();
         }
 
         private static void DisplayHelp()
