@@ -8,10 +8,10 @@ namespace DbfCmd
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
     using System.Data;
+    using System.Text;
 
-    class Csv
+    internal class Csv
     {
         public static string Format(DataTable data, bool showHeaders)
         {

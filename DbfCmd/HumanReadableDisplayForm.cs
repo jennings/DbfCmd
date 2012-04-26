@@ -8,11 +8,11 @@ namespace DbfCmd
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
     using System.Data;
+    using System.Text;
     using System.Windows.Forms;
 
-    class HumanReadableDisplayForm : Form
+    internal class HumanReadableDisplayForm : Form
     {
         public HumanReadableDisplayForm(DataTable data)
         {
