@@ -17,37 +17,47 @@ namespace DbfCmd
     {
         public static void Main(string[] args)
         {
-            ArgumentParser.Arguments arguments;
-
             try
             {
-                arguments = ArgumentParser.Parse(args);
-            }
-            catch (CommandLineException ex)
-            {
-                Console.WriteLine(ex.Message);
-                Program.DisplayHelp();
-                Environment.Exit(-1);
-                return;
-            }
+                ArgumentParser.Arguments arguments;
 
-            if (arguments.ShowHelp)
-            {
-                Program.DisplayHelp();
-                Environment.Exit(0);
-            }
+                try
+                {
+                    arguments = ArgumentParser.Parse(args);
+                }
+                catch (CommandLineException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Program.DisplayHelp();
+                    Environment.Exit(-1);
+                    return;
+                }
 
-            var runner = new QueryRunner(arguments.Directory, arguments.OutputCsv, arguments.OutputHeaders);
-            var result = runner.Run(arguments.Query);
+                if (arguments.ShowHelp)
+                {
+                    Program.DisplayHelp();
+                    Environment.Exit(0);
+                }
 
-            if (arguments.OutputCsv)
-            {
-                var csv = Csv.Format(result, arguments.OutputHeaders);
-                Console.Write(csv);
+                var runner = new QueryRunner(arguments.Directory, arguments.OutputCsv, arguments.OutputHeaders);
+                var result = runner.Run(arguments.Query);
+
+                if (arguments.OutputCsv)
+                {
+                    var csv = Csv.Format(result, arguments.OutputHeaders);
+                    Console.Write(csv);
+                }
+                else
+                {
+                    Application.Run(new HumanReadableDisplayForm(result));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Application.Run(new HumanReadableDisplayForm(result));
+                Console.WriteLine("UNHANDLED EXCEPTION");
+                Console.WriteLine("Message: " + ex.Message);
+                Console.WriteLine("Inner Exception: " + (ex.InnerException != null ? ex.InnerException.GetType().ToString() : "None"));
+                Console.WriteLine("Stack Trace: " + "\n" + ex.StackTrace);
             }
         }
 
