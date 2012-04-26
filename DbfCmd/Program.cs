@@ -42,17 +42,13 @@ namespace DbfCmd
 
             if (arguments.OutputCsv)
             {
-                Program.DisplayCsvTable(result);
+                var csv = Csv.Format(result, arguments.OutputHeaders);
+                Console.Write(csv);
             }
             else
             {
                 Application.Run(new HumanReadableDisplayForm(result));
             }
-        }
-
-        private static void DisplayCsvTable(DataTable data)
-        {
-            throw new NotImplementedException();
         }
 
         private static void DisplayHelp()

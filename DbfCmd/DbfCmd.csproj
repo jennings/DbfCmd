@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ArgumentParser.cs" />
     <Compile Include="CommandLineException.cs" />
+    <Compile Include="Csv.cs" />
     <Compile Include="HumanReadableDisplayForm.cs">
       <SubType>Form</SubType>
     </Compile>
